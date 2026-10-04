@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Drop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Quick Drop</h1>
+    <p class="sub">Upload a file, get a link that works for a short time.</p>
+
+    <label id="dropzone" for="file">
+      <input id="file" type="file" hidden>
+      <span id="dropzone-text">Drop a file here or click to choose</span>
+    </label>
+
+    <div id="progress" hidden>
+      <div id="bar"></div>
+    </div>
+
+    <p id="status" role="status"></p>
+
+    <section id="result" hidden>
+      <label for="link">Share this link</label>
+      <div class="row">
+        <input id="link" type="text" readonly>
+        <button id="copy" type="button">Copy</button>
+      </div>
+      <p id="expiry" class="sub"></p>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
