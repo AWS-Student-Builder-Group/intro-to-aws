@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# AWS SAM / build output
+.aws-sam/
+samconfig.toml
+packaged.yaml
+
+# Secrets and local env
+.env
+.env.*
+*.pem
+*.key
+
+# Editors
+.vscode/
+.idea/
+
+# Node (if tooling is added later)
+node_modules/
