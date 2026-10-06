@@ -1,10 +1,7 @@
-// Flow: ask the Lambda for presigned URLs -> upload straight to S3 -> show the download link.
-//
-// Lambda contract
-//   request : POST {filename, size, contentType}
-//   response: {uploadUrl, downloadUrl, expiresIn, fields?}
-//   If `fields` is present, uploadUrl is a presigned POST (multipart form, file last).
-//   Otherwise uploadUrl is a presigned PUT.
+// UI only. Flow: ask the Lambda for presigned URLs -> upload straight to S3 -> show the
+// download link. The AWS calls live in aws.js.
+
+import { isConfigured, requestUrls, uploadToS3 } from "./aws.js";
 
 const $ = (id) => document.getElementById(id);
 const fileInput = $("file");
@@ -16,47 +13,6 @@ let countdownTimer = null;
 function setStatus(message, kind = "") {
   statusEl.textContent = message;
   statusEl.className = kind;
-}
-
-async function requestUrls(file) {
-  const res = await fetch(window.APP_CONFIG.FUNCTION_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      filename: file.name,
-      size: file.size,
-      contentType: file.type || "application/octet-stream",
-    }),
-  });
-  const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(body.error || `Lambda returned ${res.status}`);
-  return body;
-}
-
-function uploadToS3(file, { uploadUrl, fields }, onProgress) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open(fields ? "POST" : "PUT", uploadUrl);
-
-    let payload = file;
-    if (fields) {
-      payload = new FormData();
-      Object.entries(fields).forEach(([k, v]) => payload.append(k, v));
-      payload.append("file", file); // must be the last field
-    } else {
-      xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
-    }
-
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) onProgress(e.loaded / e.total);
-    };
-    xhr.onload = () =>
-      xhr.status >= 200 && xhr.status < 300
-        ? resolve()
-        : reject(new Error(`S3 rejected the upload (${xhr.status}). Check bucket CORS.`));
-    xhr.onerror = () => reject(new Error("Upload failed. Check bucket CORS and your network."));
-    xhr.send(payload);
-  });
 }
 
 function showResult(downloadUrl, expiresIn) {
@@ -79,7 +35,7 @@ function showResult(downloadUrl, expiresIn) {
 
 async function handleFile(file) {
   if (!file) return;
-  if (window.APP_CONFIG.FUNCTION_URL.includes("REPLACE-ME")) {
+  if (!isConfigured()) {
     setStatus("Set FUNCTION_URL in frontend/config.js first.", "error");
     return;
   }

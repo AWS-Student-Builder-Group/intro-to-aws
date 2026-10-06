@@ -9,7 +9,8 @@ A static page (plain HTML/CSS/JS, no build step) for the Quick Drop demo. You pi
 | File | Purpose |
 |---|---|
 | `index.html` | Page markup: drop zone, progress bar, status line, result box |
-| `app.js` | All the logic: calls the Lambda, uploads to S3, shows the link and countdown |
+| `aws.js` | Everything that talks to AWS: asks the Lambda for presigned URLs, uploads to S3. No DOM code |
+| `app.js` | UI only: file picking, drag and drop, progress bar, status, share link and countdown. Imports `aws.js` |
 | `style.css` | Styling, using the AWS SBG palette |
 | `config.js` | The one setting you must edit: the Lambda Function URL |
 
@@ -51,12 +52,13 @@ The file never passes through the Lambda. The Lambda only signs URLs, and the si
 ```json
 {
   "uploadUrl": "https://bucket.s3.amazonaws.com/...",
-  "downloadUrl": "https://bucket.s3.amazonaws.com/...?X-Amz-Signature=...",
+  "downloadUrl": "https://<id>.lambda-url.<region>.on.aws/?k=<key>",
   "expiresIn": 3600,
   "fields": { "key": "...", "policy": "...", "x-amz-signature": "..." }
 }
 ```
 
+- `downloadUrl` is the link to share. It is a short link back to the Lambda that redirects to S3, so it contains only URL-safe characters and survives copy and paste. (A raw presigned S3 URL is long and contains `+`, `/` and `=`, which some browsers and extensions rewrite on copy, breaking the link.)
 - `expiresIn` is in seconds and drives the countdown in the page.
 - `fields` is optional. If present, `uploadUrl` is a **presigned POST**: the page sends a multipart form with these fields first and the file last, and S3 can enforce a size limit. If absent, `uploadUrl` is a **presigned PUT** and the page sends the file as the request body with its `Content-Type`.
 
