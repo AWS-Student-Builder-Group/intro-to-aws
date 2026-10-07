@@ -4,15 +4,6 @@
 
 Upload a file, get a link that works for an hour, and share it. The file goes straight from the browser to a private S3 bucket. A Lambda function hands out the signed, expiring links.
 
-```
-Browser ──1. "I want to upload"──▶ Lambda (Function URL)
-   ▲                                  │ 2. signed upload link + short share link
-   │◀─────────────────────────────────┘
-   │──3. upload the file directly──▶ S3 (private bucket, deletes files after 1 day)
-   │
-Friend opens share link ──▶ Lambda checks the file is fresh ──▶ redirects to a signed S3 download
-```
-
 ## Two ways to run it
 
 | | **A. Console + local page** | **B. Deploy everything from code** |
