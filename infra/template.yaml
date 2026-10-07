@@ -3,11 +3,11 @@ Transform: AWS::Serverless-2016-10-31
 Description: Quick Drop - web page on CloudFront + S3, and a Lambda (Function URL) that hands out expiring links.
 
 # The full cloud deployment. The first three blocks are the same thing you build by hand
-# in the console walkthrough (output.md), in the same order:
-#   console Step 1-3 -> UploadBucket      (private, CORS, delete after 1 day)
-#   console Step 4-6 -> PresignFunction   (code, handler, env vars, timeout)
-#   console Step 7   -> the Policies block (least-privilege access to the bucket)
-#   console Step 8   -> FunctionUrlConfig (public URL + CORS)
+# in the console walkthrough (Part One of instructions.md), in the same order:
+#   "Create your S3 Bucket", CORS, "Delete files after 1 day" -> UploadBucket
+#   "Create your Lambda function", "Add the code", environment variables -> PresignFunction
+#   "Give the Lambda permission to use your bucket"          -> the Policies block
+#   "Give your Lambda a web address (Function URL)"          -> FunctionUrlConfig
 # The Site* resources are extra: they host the web page itself, so nothing runs on a laptop.
 
 Parameters:

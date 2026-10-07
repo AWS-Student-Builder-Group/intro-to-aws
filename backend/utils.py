@@ -9,7 +9,7 @@ MAX_EXPIRES_IN = 3600
 DEFAULT_MAX_BYTES = 100 * 1024 * 1024
 REDIRECT_EXPIRES_IN = 60  # the signed S3 link behind a share link only needs to live this long
 
-# Keys are always "<32 hex chars>/<safe filename>", see create_key in app.py.
+# Keys are always "<32 hex chars>/<safe filename>", see create_links in app.py.
 KEY_PATTERN = re.compile(r"^[0-9a-f]{32}/[A-Za-z0-9._-]{1,100}$")
 
 

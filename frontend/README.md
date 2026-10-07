@@ -72,7 +72,7 @@ The file never passes through the Lambda. The Lambda only signs URLs, and the si
 | Browser console shows a CORS error on the first request | The Function URL CORS config doesn't allow `http://localhost:8000` (or doesn't allow the `Content-Type` header and `POST`) |
 | "Upload failed. Check bucket CORS..." | The S3 bucket CORS config doesn't allow `PUT`/`POST` from your origin |
 | "S3 rejected the upload (403)" | Presigned URL expired, the Lambda role lacks `s3:PutObject`, or (PUT) the `Content-Type` sent differs from the one that was signed |
-| Link works, then stops | Expected. The presigned URL has expired |
+| Link works, then stops | Expected. After `EXPIRES_IN` the share link answers "This link has expired." (410) |
 | Edited `config.js` but nothing changed | Hard refresh. `serve.py` disables caching, but another server might not |
 
 ## Customising
