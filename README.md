@@ -4,18 +4,6 @@
 
 Upload a file, get a link that works for an hour, and share it. The file goes straight from the browser to a private S3 bucket. A Lambda function hands out the signed, expiring links.
 
-## Two ways to run it
-
-| | **A. Console + local page** | **B. Deploy everything from code** |
-|---|---|---|
-| For | Workshop participants | The maintainer only (not part of the workshop) |
-| You build | S3 bucket, Lambda, IAM and Function URL by hand in the AWS console | One command creates everything |
-| Web page runs | On your laptop (`http://localhost:8000`) | On AWS (CloudFront + S3, over HTTPS) |
-| You need | AWS account, Python 3 | AWS account, Python 3, AWS CLI, SAM CLI, AWS credentials |
-| Guide | [`output.md`](output.md) | [below](#b-deploy-everything-from-code) |
-
-Both use the same code in `backend/` and `frontend/`. Path B uses generated resource names, so it never clashes with anything you built by hand in Path A.
-
 ## Requirements & Installation
 
 **Always:**
